@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.user.call.mapper.CallMapper" >
+    <resultMap id="BaseResultMap" type="com.user.call.bean.RepositoryBean" >
+        <id column="REPOSITORYID" property="REPOSITORYID" />
+        <result column="CALLID" property="CALLID" />
+        <result column="COMMODITYGROUP" property="COMMODITYGROUP" />
+        <result column="DEPARTMENT" property="DEPARTMENT"/>
+        <result column="FILTERDATE" property="FILTERDATE" />
+        <result column="GDLX" property="GDLX" />
+        <result column="LXFS" property="LXFS" />
+        <result column="LYID" property="LYID" />
+        <result column="PERSON" property="PERSON" />
+        <result column="SFSCGD" property="SFSCGD" />
+        <result column="UNIT" property="UNIT" />
+        <result column="CALLNAME" property="CALLNAME" />
+        <result column="HASLD" property="HASLD" />
+        <result column="REMARK" property="REMARK" />
+        <result column="DESCRIPTION" property="DESCRIPTION" />
+    </resultMap>
+
+    <!--<select id="findCallByWhere" parameterType="BaseResultMap">-->
+        <!--SELECT * FROM(SELECT A.*, ROWNUM RN FROM (SELECT * FROM REPOSITORY  ORDER BY repositoryid asc) A WHERE ROWNUM &lt;= #{7}) WHERE RN > #{6}-->
+        <!--<where>-->
+
+        <!--</where>-->
+    <!--</select>-->
+    <select id="findCallByWhere" resultMap="BaseResultMap">
+        SELECT * FROM(SELECT A.*, ROWNUM RN FROM (
+        SELECT * FROM REPOSITORY
+        <where>
+            <if test="fwz!=null and fwz!=''">
+                <bind name="fwzs" value="'%'+fwz+'%'" />
+                COMMODITYGROUP like #{fwzs}
+            </if>
+            <if test="zy!=null and zy!='' ">
+                <bind name="zys" value="'%'+zy+'%'" />
+                and DESCRIPTION like #{zys}
+            </if>
+            <if test="ssxt!=null and ssxt!=''">
+                <bind name="ssxts" value="'%'+ssxt+'%'" />
+                and zxxt like #{ssxts}
+            </if>
+        </where>
+        order by filterdate DESC) A
+        WHERE ROWNUM &lt;= #{limit}) WHERE RN > #{page}
+    </select>
+    <select id="findCount" resultType="java.lang.Integer">
+        SELECT COUNT(repositoryid) FROM(
+        SELECT * FROM REPOSITORY
+        <where>
+
+            <if test="fwz!=null and fwz!=''">
+                <bind name="fwzs" value="'%'+fwz+'%'" />
+                COMMODITYGROUP like #{fwzs}
+            </if>
+            <if test="zy!=null and zy!='' ">
+                <bind name="zys" value="'%'+zy+'%'" />
+                and DESCRIPTION like #{zys}
+            </if>
+            <if test="ssxt!=null and ssxt!=''">
+                <bind name="ssxts" value="'%'+ssxt+'%'" />
+                and zxxt like #{ssxts}
+            </if>
+        </where>
+        order by filterdate DESC) A
+    </select>
+    <select id="findByCn" resultMap="BaseResultMap">
+        SELECT * FROM(SELECT A.*, ROWNUM RN FROM (
+        SELECT * FROM REPOSITORY RIGHT JOIN COMMODITIES ON REPOSITORY.COMMODITYGROUP=COMMODITIES.COMMODITY
+        left join ALNDOMAIN ON REPOSITORY.UDSYSTEM=ALNDOMAIN.value
+        <where>
+            <if test="fwz!=null and fwz!=''">
+                <bind name="fwzs" value="'%'+fwz+'%'" />
+                COMMODITIES.DESCRIPTION like #{fwzs}
+            </if>
+            <if test="zy!=null and zy!='' ">
+                <bind name="zys" value="'%'+zy+'%'" />
+                and REPOSITORY.DESCRIPTION like #{zys}
+            </if>
+            <if test="ssxt!=null and ssxt!=''">
+                <bind name="ssxts" value="'%'+ssxt+'%'" />
+                and ALNDOMAIN.DESCRIPTION like #{ssxts}
+            </if>
+        </where>
+        order by filterdate DESC) A
+        WHERE ROWNUM &lt;= #{limit}) WHERE RN > #{page}
+    </select>
+    <select id="countByCn" resultType="java.lang.Integer">
+        SELECT COUNT(repositoryid) FROM(SELECT A.*, ROWNUM RN FROM (
+        SELECT * FROM REPOSITORY RIGHT JOIN COMMODITIES ON REPOSITORY.COMMODITYGROUP=COMMODITIES.COMMODITY
+        left join ALNDOMAIN ON REPOSITORY.UDSYSTEM=ALNDOMAIN.value
+        <where>
+            <if test="fwz!=null and fwz!=''">
+                <bind name="fwzs" value="'%'+fwz+'%'" />
+                COMMODITIES.DESCRIPTION like #{fwzs}
+            </if>
+            <if test="zy!=null and zy!='' ">
+                <bind name="zys" value="'%'+zy+'%'" />
+                and REPOSITORY.DESCRIPTION like #{zys}
+            </if>
+            <if test="ssxt!=null and ssxt!=''">
+                <bind name="ssxts" value="'%'+ssxt+'%'" />
+                and ALNDOMAIN.DESCRIPTION like #{ssxts}
+            </if>
+        </where>
+        order by filterdate DESC) A)
+    </select>
+</mapper>

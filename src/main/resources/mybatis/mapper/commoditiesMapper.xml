@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.user.call.mapper.CommoditiesMapper" >
+    <select id="findAllCommodities" resultType="com.user.call.bean.CommoditiesBean">
+        SELECT * FROM commodities
+    </select>
+    <select id="findAllCommoditiesByPage" resultType="com.user.call.bean.CommoditiesBean">
+        select * from (SELECT A.*, ROWNUM RN FROM (SELECT * FROM commodities) A WHERE ROWNUM &lt;= #{limit}) WHERE RN > #{page}
+    </select>
+    <select id="findCount" resultType="int">
+        SELECT count (COMMODITIESID) FROM commodities
+    </select>
+    <select id="findByCom" resultType="com.user.call.bean.CommoditiesBean">
+        SELECT * FROM commodities where commodity=#{com}
+    </select>
+    <select id="findByWhere" resultType="com.user.call.bean.CommoditiesBean">
+        select * from (SELECT A.*, ROWNUM RN FROM (SELECT * FROM commodities where DESCRIPTION like #{description}) A WHERE ROWNUM &lt;= #{limit}) WHERE RN > #{page}
+    </select>
+    <select id="findByWhereCount" resultType="int">
+        SELECT count(DESCRIPTION) FROM commodities where DESCRIPTION like #{description}
+    </select>
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.user.call.mapper.WorkOrderTypeMapper" >
+    <select id="findAll" resultType="com.user.call.bean.WorkOrderTypeBean">
+        SELECT * from ALNDOMAIN where domainid='GDLX'
+    </select>
+    <select id="findIncident" resultType="java.util.Map">
+        select * from alndomain where domainid='UDINCITYPE'
+    </select>
+    <select id="findSr" resultType="java.util.Map">
+        select * from alndomain where domainid='UDTPYE'
+    </select>
+    <select id="findType" resultType="java.util.Map" parameterType="java.lang.String">
+        <bind name="pattern" value="'%'+type +'%'" />
+        select * from alndomain where domainid='UDSRTYPE' and  value like #{pattern}
+    </select>
+</mapper>

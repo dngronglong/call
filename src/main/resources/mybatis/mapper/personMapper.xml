@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.user.call.mapper.PersonMapper" >
+    <resultMap id="BaseResultMap" type="com.user.call.bean.PersonBean" >
+        <id column="PERSONUID" property="PERSONUID" />
+        <result column="DISPLAYNAME" property="DISPLAYNAME" />
+        <result column="DEPARTMENT" property="DEPARTMENT" />
+        <result column="PERSONID" property="PERSONID"/>
+        <result column="LOCATIONSITE" property="LOCATIONSITE" />
+        <result column="LOCATIONORG" property="LOCATIONORG" />
+    </resultMap>
+    <select id="findAllPerson" resultMap="BaseResultMap">
+        select * from person
+    </select>
+    <select id="findAllPersonByPage" resultMap="BaseResultMap">
+        select * from(SELECT A.*, ROWNUM RN FROM (SELECT * FROM person order by personuid asc ) A WHERE ROWNUM &lt;= #{limit}) WHERE RN > #{page}
+    </select>
+    <select id="findCount" resultType="int">
+        select count (personuid) from person
+    </select>
+    <select id="findPersonByWhere" resultMap="BaseResultMap">
+        SELECT * FROM(SELECT A.*, ROWNUM RN FROM (
+        SELECT * FROM person
+        <where>
+            <if test="personid!=null and personid!=''">
+                <bind name="persons" value="'%'+personid+'%'" />
+                personid like #{persons}
+            </if>
+            <if test="displayname!=null and displayname!='' ">
+                <bind name="names" value="'%'+displayname+'%'" />
+                and displayname like #{names}
+            </if>
+            <if test="department!=null and department!=''">
+                <bind name="departments" value="'%'+department+'%'" />
+                and DEPARTMENT like #{departments}
+            </if>
+        </where>
+        order by personuid asc ) A
+        WHERE ROWNUM &lt;= #{limit}) WHERE RN > #{page}
+    </select>
+    <select id="findCountByWhere" resultType="java.lang.Integer">
+        SELECT count (personuid) FROM(SELECT * FROM person
+        <where>
+            <if test="personid!=null and personid!=''">
+                <bind name="persons" value="'%'+personid+'%'" />
+                personid like #{persons}
+            </if>
+            <if test="displayname!=null and displayname!='' ">
+                <bind name="names" value="'%'+displayname+'%'" />
+                and displayname like #{names}
+            </if>
+            <if test="department!=null and department!=''">
+                <bind name="departments" value="'%'+department+'%'" />
+                and DEPARTMENT like #{departments}
+            </if>
+        </where>
+        order by personuid asc ) A
+    </select>
+</mapper>

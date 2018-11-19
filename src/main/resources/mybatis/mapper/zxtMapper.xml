@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.user.call.mapper.ZxtMapper" >
+<resultMap id="BaseResultMap" type="com.user.call.bean.ZxtBean" >
+    <id column="ALNDOMAINID" property="ALNDOMAINID" />
+    <result column="VALUE" property="VALUE" />
+    <result column="DESCRIPTION" property="DESCRIPTION" />
+</resultMap>
+<select id="findAllZxt" resultMap="BaseResultMap">
+    SELECT * FROM ALNDOMAIN where domainid='ZXT' and VALUE like #{value}
+</select>
+<select id="findAllZxtByPage" resultMap="BaseResultMap">
+    select * from (SELECT A.*, ROWNUM RN FROM (SELECT * FROM ALNDOMAIN
+     <where>
+         domainid='ZXT'
+         <if test="value!=null and value!=''">
+             <bind name="values" value="value+'%'" />
+             and VALUE like #{values}
+         </if>
+     </where>
+    ) A WHERE ROWNUM &lt;= #{limit}) WHERE RN > #{page}
+</select>
+    <select id="findByValue" resultMap="BaseResultMap">
+        SELECT * FROM ALNDOMAIN
+        <where>
+            domainid='ZXT'
+            <if test="fwz!=null and fwz!=''">
+                <bind name="fwzs" value="'%'+fwz+'%'" />
+                and VALUE like #{fwzs}
+            </if>
+        </where>
+    </select>
+<select id="findCount" resultType="int">
+    SELECT count (ALNDOMAINID) FROM ALNDOMAIN
+    <where>
+        domainid='ZXT'
+        <if test="value!=null and value!=''">
+            <bind name="values" value="value+'%'" />
+            and VALUE like #{values}
+        </if>
+    </where>
+</select>
+    <select id="findByWhere" resultMap="BaseResultMap">
+        select * from (SELECT A.*, ROWNUM RN FROM (SELECT * FROM ALNDOMAIN
+        <where>
+            domainid='ZXT'
+            <if test="value!=null and value!=''">
+                <bind name="values" value="value+'%'" />
+                and VALUE like #{values}
+            </if>
+            <if test="description!=null and description!=''">
+                <bind name="descriptions" value="'%'+description+'%'" />
+                AND DESCRIPTION LIKE #{descriptions}
+            </if>
+        </where>
+         ) A WHERE ROWNUM &lt;= #{limit}) WHERE RN > #{page}
+    </select>
+    <select id="findByWhereCount" resultType="int">
+        SELECT count(DESCRIPTION) FROM ALNDOMAIN
+        <where>
+            domainid='ZXT'
+            <if test="value!=null and value!=''">
+                <bind name="values" value="value+'%'" />
+                and VALUE like #{values}
+            </if>
+            <if test="description!=null and description!=''">
+                <bind name="descriptions" value="'%'+description+'%'" />
+                AND DESCRIPTION LIKE #{descriptions}
+            </if>
+        </where>
+    </select>
+    <select id="findById" resultType="com.user.call.bean.ZxtBean">
+        SELECT * from ALNDOMAIN where domainid='ZXT' and value=#{value}
+    </select>
+</mapper>
