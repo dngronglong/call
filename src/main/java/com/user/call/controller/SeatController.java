@@ -87,7 +87,7 @@ public class SeatController {
 
     @ResponseBody
     @PostMapping(value = {"/saveCall"}, produces = {"application/json;charset=utf-8"})
-    public void saveCall(String beiZhu, String info, String time, String caller, String baoGao, String uinit, String buMen, String fuWuZu, String ziXun, String callId, String luId, String gdlx, String status,String yy,String xxinfo,String jjfa,Integer id, HttpServletRequest rq) {
+    public void saveCall(String beiZhu, String info, String time, String caller, String baoGao, String uinit, String buMen, String fuWuZu, String ziXun, String callId, String luId, String gdlx, String status, String yy, String xxinfo, String jjfa, Integer id, HttpServletRequest rq) {
         Date date = null;
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
@@ -128,7 +128,7 @@ public class SeatController {
 
     @ResponseBody
     @PostMapping(value = {"/saveLog"}, produces = {"application/json;charset=utf-8"})
-    public int saveLog(String caller, String callid, String lyid, String usernameen, String depname, String fwz,String udsystem,String unit) {
+    public int saveLog(String caller, String callid, String lyid, String usernameen, String depname, String fwz, String udsystem, String unit) {
 //        this.callId = callid;
 //        this.lyId = lyid;
         Date date = new Date();

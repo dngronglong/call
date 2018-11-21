@@ -797,7 +797,8 @@
                             DESCRIPTION_LONGDESCRIPTION: xxinfo,
                             FR1CODE_LONGDESCRIPTION: yy,
                             FR2CODE_LONGDESCRIPTION: jjfa,
-                            ACTUALFINISH: time
+                            ACTUALFINISH: time,
+                            UDRECORDID:GetQueryString("repositoryId")
                         };
                         var param = {
                             personid: '${userId}',
@@ -811,7 +812,8 @@
                             dataType: 'json',
                             success: function (msg) {
                                 realGd();
-                                layer.alert("已生成工单！");
+                                // console.log(msg.result);
+                                // layer.alert("已生成工单！");
                             },
                             error: function(XMLHttpRequest, textStatus, errorThrown) {
                                 // alert(XMLHttpRequest.status);
@@ -845,7 +847,8 @@
                         FR2CODE_LONGDESCRIPTION: jjfa,
                         ACTUALFINISH: time,
                         UDCRTYPE: "一级",
-                        ACTUALCONTACTDATE: time
+                        ACTUALCONTACTDATE: time,
+                        UDRECORDID:GetQueryString("repositoryId")
                     };
                     var param = {
                         personid: '${userId}',
@@ -859,7 +862,7 @@
                         dataType: 'json',
                         success: function (msg) {
                             realGd();
-                            layer.alert("已生成工单！");
+                            // layer.alert("已生成工单！");
                         },
                         error: function(XMLHttpRequest, textStatus, errorThrown) {
                             // alert(XMLHttpRequest.status);
@@ -887,7 +890,8 @@
                     TARGETFINISH: time,  //计划结束时间
                     UDCRTYPE: '',  //等级程度
                     TARGETSTART: time,  //计划结束时间
-                    UDZXT: zxt //所属系统
+                    UDZXT: zxt, //所属系统,
+                    UDRECORDID:GetQueryString("repositoryId")
                 };
                 var param = {
                     personid: '${userId}',
@@ -902,7 +906,7 @@
                     success: function (msg) {
                         // console.log(msg);
                             realGd();
-                            layer.alert("已生成工单！");
+                            // layer.alert("已生成工单！");
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         // alert(XMLHttpRequest.status);
@@ -975,7 +979,7 @@
             },
             success: function (msg) {
                 //layer.alert("保存成功！");
-                layer.alert('保存成功！', function () {
+                layer.alert('已生成工单！', function () {
                     window.close();
                 });
             }
