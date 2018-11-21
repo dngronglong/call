@@ -810,13 +810,20 @@
                             data: JSON.stringify(param),
                             dataType: 'json',
                             success: function (msg) {
-                                console.log(msg);
-                                if (msg.errcode == 200) {
-                                    realGd();
-                                } else if (msg.errcode == 500) {
-                                    layer.alert(msg.errmsg);
+                                realGd();
+                                layer.alert("已生成工单！");
+                            },
+                            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                // alert(XMLHttpRequest.status);
+                                // alert(XMLHttpRequest.readyState);
+                                // alert(textStatus);
+                                if (XMLHttpRequest.status==200){
+                                    layer.alert("联系人不存在，不能生成工单！")
                                 }
-
+                                // layer.alert(errorThrown);
+                            },
+                            complete: function(XMLHttpRequest, textStatus) {
+                                this; // 调用本次AJAX请求时传递的options参数
                             }
                         })
                     }
@@ -851,12 +858,20 @@
                         data: JSON.stringify(param),
                         dataType: 'json',
                         success: function (msg) {
-                            console.log(msg);
-                            if (msg.errcode == 200) {
-                                realGd();
-                            } else if (msg.errcode == 500) {
-                                layer.alert(msg.errmsg);
+                            realGd();
+                            layer.alert("已生成工单！");
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                            // alert(XMLHttpRequest.status);
+                            // alert(XMLHttpRequest.readyState);
+                            // alert(textStatus);
+                            if (XMLHttpRequest.status==200){
+                                layer.alert("联系人不存在，不能生成工单！")
                             }
+                            // layer.alert(errorThrown);
+                        },
+                        complete: function(XMLHttpRequest, textStatus) {
+                            this; // 调用本次AJAX请求时传递的options参数
                         }
                     })
                 }
@@ -886,11 +901,20 @@
                     dataType: 'json',
                     success: function (msg) {
                         // console.log(msg);
-                        if (msg.errcode == 200) {
                             realGd();
-                        } else if (msg.errcode == 500) {
-                            layer.alert(msg.errmsg);
+                            layer.alert("已生成工单！");
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        // alert(XMLHttpRequest.status);
+                        // alert(XMLHttpRequest.readyState);
+                        // alert(textStatus);
+                        if (XMLHttpRequest.status==200){
+                            layer.alert("联系人不存在，不能生成工单！")
                         }
+                        // layer.alert(errorThrown);
+                    },
+                    complete: function(XMLHttpRequest, textStatus) {
+                        this; // 调用本次AJAX请求时传递的options参数
                     }
                 })
             }
