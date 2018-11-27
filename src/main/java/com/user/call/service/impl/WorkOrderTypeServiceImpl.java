@@ -67,4 +67,24 @@ public class WorkOrderTypeServiceImpl implements WorkOrderTypeService {
 //        System.out.println(param);
         return workOrderTypeMapper.findType(param);
     }
+
+    @Override
+    public List<Map> searchGjyh(int paramInt1, int paramInt2) {
+        return workOrderTypeMapper.findGjyh(paramInt1, paramInt2);
+    }
+
+    @Override
+    public int countGjyh() {
+        return workOrderTypeMapper.countGjyh();
+    }
+
+    @Override
+    public List<Map> findGjyhByWhere(String personid, String displayname, String department, int page, int limit) {
+        return workOrderTypeMapper.findGjyhByWhere(personid, displayname, department, page, limit);
+    }
+
+    @Override
+    public int findGjyhCountByWhere(String personid, String displayname, String department, int page, int limit) {
+        return workOrderTypeMapper.findGjyhCountByWhere(personid, displayname, department, page, limit);
+    }
 }

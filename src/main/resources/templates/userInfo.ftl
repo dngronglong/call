@@ -25,7 +25,7 @@
             </select>
         </div>
     </div>
-    <button class="layui-btn" id="realGd" style="float: right;margin-top: 120px;margin-right: 20px">
+    <button class="layui-btn" id="realGd" style="float: right;margin-top: 20px;margin-right: 20px">
         确认生成工单
     </button>
 </div>
@@ -48,8 +48,10 @@
         <#--<span-->
         <#--onclick="searchPerson()" style="float: left;font-size: 30px;margin-top: 10px;margin-left: 5px"-->
         <#--class="layui-icon search">&#xe615;</span>-->
-            <td><input style="width: 75%;float: left" class="layui-input" id="baoGaoRen" type='text'>
-                <span class="search" onclick="searchPerson()"><img style="width: 35px" src="../static/images/s13.png"></span>
+            <td>
+                <input style="width: 75%;float: left" class="layui-input" id="baoGaoRen" type='text'>
+                <span class="search" onclick="searchPerson()"><img style="width: 35px"
+                                                                   src="../static/images/s13.png"></span>
             </td>
             <td id="unit" style="text-align: center"></td>
             <td id="buMen" style="text-align: center"></td>
@@ -121,6 +123,25 @@
     </span>
     <div style="padding-top: 38px">
         <table id="person" lay-filter="demoEvent" style="padding-top: 10px"></table>
+    </div>
+</div>
+<#--关键用户-->
+<div class="layui-card-body" id="gjyh1" style="display: none">
+    <!-- 条件查询 -->
+    <span class="layui-btn" style="background-color :rgba(255,255,255,0);width: 100%;float: left">
+        <input type="text" style="float: left;width: 200px;margin-left: 20px" lay-verify="title"
+               autocomplete="off" placeholder="请输入人员"
+               class="layui-input" id="g_personid" onkeypress="searchUser()">
+        <input type="text" style="float: left;width: 200px;margin-left: 20px" lay-verify="title"
+               autocomplete="off" id="g_displayname" placeholder="请输入名称"
+               class="layui-input" onkeypress="searchUser()">
+        <input type="text" style="float: left;width: 200px;margin-left: 20px" lay-verify="title"
+               autocomplete="off" id="g_department" placeholder="请输入部门"
+               class="layui-input" onkeypress="searchUser()">
+        <button class="layui-btn" style="float: left;margin-left: 20px" onclick="searchUser()">搜索</button>
+    </span>
+    <div style="padding-top: 38px">
+        <table id="t_gjyh" lay-filter="gjyhEvent" style="padding-top: 10px"></table>
     </div>
 </div>
 
@@ -231,6 +252,7 @@
     var table;
     var person;
     var zxt;
+    var gjyh;
     var $ = layui.jquery;
 
     function searchC() {
@@ -260,6 +282,66 @@
                         event: 'comZxt',
                         style: 'cursor: pointer;'
                     }
+                ]],
+                done: function () {
+                    $("th").css({'font-weight': 'bold'});
+                }
+            });
+
+        });
+    }
+
+    //搜索关键用户
+    function searchUser() {
+        var personid = $("#g_personid").val();
+        if (personid == "请输入人员") {
+            personid = "";
+        }
+        var name = $("#g_displayname").val();
+        if (name == "请输入名称") {
+            name = "";
+        }
+        var department = $("#g_department").val();
+        if (department == "请输入部门") {
+            department = "";
+        }
+        layui.use('table', function () {
+            table = layui.table;
+            table.render({
+                elem: '#t_gjyh'
+                , id: 't_gjyh'
+                //,height: 315
+                //,height:'full-155'
+                , offset: 'auto'
+                , where: {"personid": personid, "displayname": name, "department": department}
+                , url: '${basePath}/workOrder/searchByWhere' //数据接口
+                , page: true //开启分页
+                , cols: [[ //表头
+                    {
+                        field: 'PERSONID',
+                        title: '人员',
+                        event: 'setSign',
+                        width: 300,
+                        align: 'center',
+                        style: 'cursor: pointer;'
+                    }
+                    , {
+                        field: 'DISPLAYNAME',
+                        title: '名称',
+                        align: 'center',
+                        width: 130,
+                        event: 'setSign',
+                        style: 'cursor: pointer;'
+                    }
+                    , {
+                        field: 'DEPARTMENT',
+                        title: '部门',
+                        align: 'center',
+                        width: 300,
+                        event: 'setSign',
+                        style: 'cursor: pointer;'
+                    }
+
                 ]],
                 done: function () {
                     $("th").css({'font-weight': 'bold'});
@@ -534,6 +616,61 @@
         });
     }
 
+    //搜索关键用户
+    function searchGjyh() {
+        layui.use('table', function () {
+            table = layui.table;
+            table.render({
+                elem: '#t_gjyh'
+                , id: 't_gjyh'
+                , offset: 'auto'
+                , url: '${basePath}/workOrder/searchGjyh' //数据接口
+                , page: true //开启分页
+                , cols: [[ //表头
+                    {
+                        field: 'PERSONID',
+                        title: '人员',
+                        event: 'setSign',
+                        width: 300,
+                        align: 'center',
+                        style: 'cursor: pointer;'
+                    }
+                    , {
+                        field: 'DISPLAYNAME',
+                        title: '名称',
+                        align: 'center',
+                        width: 130,
+                        event: 'setSign',
+                        style: 'cursor: pointer;'
+                    }
+                    , {
+                        field: 'DEPARTMENT',
+                        title: '部门',
+                        align: 'center',
+                        width: 300,
+                        event: 'setSign',
+                        style: 'cursor: pointer;'
+                    }
+
+                ]],
+                done: function () {
+                    $("th").css({'font-weight': 'bold'});
+                }
+            });
+
+        });
+
+        gjyh = layer.open({
+            type: 1,
+            title: ["选择关键人员"],
+            area: ['900px', '600px'],
+            content: $("#gjyh1"),
+            end: function () {
+                $("#gjyh1").hide();
+            }
+        });
+    }
+
     function searchZxt() {
         layui.use('table', function () {
             table = layui.table;
@@ -588,6 +725,7 @@
         //监听单元格事件
         table.on('tool(demoEvent)', function (obj) {
             var data = obj.data;
+
             if (obj.event === 'setSign') {
                 //layer.msg(data.locationsite);
                 $.ajax({
@@ -604,6 +742,16 @@
                 $("#data1 td input:eq(1)").attr("userNameEn", data.personid);
                 $("#data1 td:eq(3)").text(data.department);
                 layer.close(person);
+            }
+        });
+        table.on('tool(gjyhEvent)', function (obj) {
+            var data = obj.data;
+            console.log(data);
+            if (obj.event === 'setSign') {
+                //layer.msg(data.locationsite);
+                $("#p_gjyh").val(data.DISPLAYNAME);
+                $("#p_gjyh").attr("personid",data.PERSONID);
+                layer.close(gjyh);
             }
         });
         table.on('tool(zxtEvent)', function (obj) {
@@ -681,6 +829,9 @@
                 '            </select>\n' +
                 '        </div>\n' +
                 '    </div>';
+        var option4 = '<div class="layui-inline layui-form-pane" style="width: 321px;" id="gjyh"><label class="layui-form-label">关键用户</label><div class="layui-input-inline"><input style="width: 176px;float: left" class="layui-input" id="p_gjyh" type=\'text\' disabled>' +
+                '<span class="search" onclick="searchGjyh()"><img style="width: 35px" src="../static/images/s13.png"></span></div></div>';
+        var option5 = '';
         form.on('select(gdlx)', function (data) {
             // layer.alert(JSON.stringify(data));
             if (data.value == "PROBLEM") {//问题
@@ -723,6 +874,7 @@
         });
         form.on('select(qqlx)', function (data) {
             qqlx = data.value;
+            console.log(qqlx);
             $.ajax({
                 type: "POST",
                 url: "${basePath}/workOrder/sr/type",
@@ -731,8 +883,13 @@
                     $("#qqtype option").not(":first").empty();
                     for (var i = 0; i < data.length; i++) {
                         $("#qqtype").append("<option value='" + data[i].VALUE + "'>" + data[i].VALUE + "</option>");
-                        form.render('select');
                     }
+                    if (qqlx == '需求') {
+                        $("#fwqqfl").after(option4);
+                    } else {
+                        $("#gjyh").remove();
+                    }
+                    form.render('select');
                 }
 
             })
@@ -750,7 +907,7 @@
         var s_sjlx = '';
         form.on('select(qqtype)', function (data) {
             qqtype = data.value;
-            // console.log(JSON.stringify(data));
+            console.log(qqtype);
         })
         form.on('select(s_sjlx)', function (data) {
             s_sjlx = data.value;
@@ -760,7 +917,8 @@
             var baoGao = $("#baoGaoRen").attr("userNameEn");
             var gdlx = $("#select :checked").val();
             var info = $("#info").val();
-            console.log(baoGao);
+            var gjyh=$("#p_gjyh").attr("personid");
+
             if (info == "请输入摘要") {
                 info = "";
             }
@@ -773,6 +931,10 @@
             if (jjfa == "请输入解决方案") {
                 jjfa = "";
             }
+            if (gjyh==""){
+                layer.alert("关键用户不能为空！");
+                return false;
+            }
             // console.log(xxinfo+","+yy+","+jjfa);
             if (gdlx == "") {
                 layer.alert("工单类型不能为空！");
@@ -782,6 +944,49 @@
                 if (qqlx == "") {
                     layer.alert("请求类型不能为空！");
                     return false;
+                } else if(qqlx=="需求"){
+                    //服务请求
+                    var tables1 = {
+                        UDTPYE: qqlx,
+                        UDSRTYPE: qqtype,
+                        REPORTEDBYID: baoGao,
+                        REPORTEDPHONE: ${caller},
+                        DESCRIPTION: info,
+                        DESCRIPTION_LONGDESCRIPTION: xxinfo,
+                        FR1CODE_LONGDESCRIPTION: yy,
+                        FR2CODE_LONGDESCRIPTION: jjfa,
+                        ACTUALFINISH: time,
+                        UDRECORDID: GetQueryString("repositoryId"),
+                        UDHQDEPT:gjyh
+                    };
+                    var param = {
+                        personid: '${userId}',
+                        type: 'SR', //工单类型
+                        TABLES: tables1
+                    };
+                    $.ajax({
+                        type: "POST",
+                        url: "${basePath}/workOrder/add",
+                        data: JSON.stringify(param),
+                        dataType: 'json',
+                        success: function (msg) {
+                            realGd();
+                            // console.log(msg.result);
+                            // layer.alert("已生成工单！");
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            // alert(XMLHttpRequest.status);
+                            // alert(XMLHttpRequest.readyState);
+                            // alert(textStatus);
+                            if (XMLHttpRequest.status == 200) {
+                                layer.alert("联系人不存在，不能生成工单！")
+                            }
+                            // layer.alert(errorThrown);
+                        },
+                        complete: function (XMLHttpRequest, textStatus) {
+                            this; // 调用本次AJAX请求时传递的options参数
+                        }
+                    })
                 } else {
                     if (qqtype == "") {
                         layer.alert("服务请求分类不能为空！");
@@ -798,7 +1003,7 @@
                             FR1CODE_LONGDESCRIPTION: yy,
                             FR2CODE_LONGDESCRIPTION: jjfa,
                             ACTUALFINISH: time,
-                            UDRECORDID:GetQueryString("repositoryId")
+                            UDRECORDID: GetQueryString("repositoryId")
                         };
                         var param = {
                             personid: '${userId}',
@@ -815,16 +1020,16 @@
                                 // console.log(msg.result);
                                 // layer.alert("已生成工单！");
                             },
-                            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
                                 // alert(XMLHttpRequest.status);
                                 // alert(XMLHttpRequest.readyState);
                                 // alert(textStatus);
-                                if (XMLHttpRequest.status==200){
+                                if (XMLHttpRequest.status == 200) {
                                     layer.alert("联系人不存在，不能生成工单！")
                                 }
                                 // layer.alert(errorThrown);
                             },
-                            complete: function(XMLHttpRequest, textStatus) {
+                            complete: function (XMLHttpRequest, textStatus) {
                                 this; // 调用本次AJAX请求时传递的options参数
                             }
                         })
@@ -848,7 +1053,7 @@
                         ACTUALFINISH: time,
                         UDCRTYPE: "一级",
                         ACTUALCONTACTDATE: time,
-                        UDRECORDID:GetQueryString("repositoryId")
+                        UDRECORDID: GetQueryString("repositoryId")
                     };
                     var param = {
                         personid: '${userId}',
@@ -864,16 +1069,16 @@
                             realGd();
                             // layer.alert("已生成工单！");
                         },
-                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
                             // alert(XMLHttpRequest.status);
                             // alert(XMLHttpRequest.readyState);
                             // alert(textStatus);
-                            if (XMLHttpRequest.status==200){
+                            if (XMLHttpRequest.status == 200) {
                                 layer.alert("联系人不存在，不能生成工单！")
                             }
                             // layer.alert(errorThrown);
                         },
-                        complete: function(XMLHttpRequest, textStatus) {
+                        complete: function (XMLHttpRequest, textStatus) {
                             this; // 调用本次AJAX请求时传递的options参数
                         }
                     })
@@ -890,14 +1095,15 @@
                     TARGETFINISH: time,  //计划结束时间
                     UDCRTYPE: '',  //等级程度
                     TARGETSTART: time,  //计划结束时间
-                    UDZXT: zxt, //所属系统,
-                    UDRECORDID:GetQueryString("repositoryId")
+                    UDZXT: $("#ziXunXiTong").attr("zxt"), //所属系统,
+                    UDRECORDID: GetQueryString("repositoryId")
                 };
                 var param = {
                     personid: '${userId}',
                     type: 'PROBLEM', //工单类型
                     TABLES: tables
                 };
+                console.log(param);
                 $.ajax({
                     type: "POST",
                     url: "${basePath}/workOrder/add",
@@ -905,19 +1111,19 @@
                     dataType: 'json',
                     success: function (msg) {
                         // console.log(msg);
-                            realGd();
-                            // layer.alert("已生成工单！");
+                        realGd();
+                        // layer.alert("已生成工单！");
                     },
-                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
                         // alert(XMLHttpRequest.status);
                         // alert(XMLHttpRequest.readyState);
                         // alert(textStatus);
-                        if (XMLHttpRequest.status==200){
+                        if (XMLHttpRequest.status == 200) {
                             layer.alert("联系人不存在，不能生成工单！")
                         }
                         // layer.alert(errorThrown);
                     },
-                    complete: function(XMLHttpRequest, textStatus) {
+                    complete: function (XMLHttpRequest, textStatus) {
                         this; // 调用本次AJAX请求时传递的options参数
                     }
                 })
@@ -988,6 +1194,7 @@
 
     //不生成工单
     function unBuild() {
+        var $ = layui.jquery;
         var xxinfo = $("#xxinfo").val();
         var yy = $("#yy").val();
         if (yy == "请输入原因") {
@@ -997,7 +1204,6 @@
         if (jjfa == "请输入解决方案") {
             jjfa = "";
         }
-        var $ = layui.jquery;
         var beiZhu = $("#beiZhu").val();
         var baoGao = $("#baoGaoRen").attr("userNameEn");
         var uinit = $("#unit").text();

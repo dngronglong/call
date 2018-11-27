@@ -441,7 +441,7 @@
                 , {field: 'repositoryid', title: '序号', width: 60, align: 'center'}
                 , {field: 'commoditygroup', title: '服务组', align: 'center', width: 180}
                 , {field: 'udsystem', title: '所属系统', align: 'center', width: 180}
-                , {field: 'description', title: '摘要', width: 410, align: 'center'}
+                , {field: 'description', title: '摘要', width: 410, align: 'left'}
                 , {field: 'person', title: '来电人员', width: 90, align: 'center'}
                 , {field: 'lxfs', title: '来电号码', width: 130, align: 'center'}
                 , {field: 'filterdate', title: '来电时间', width: 180, sort: true, align: 'center'}
@@ -493,13 +493,21 @@
                 async: false,
                 dataType: "json",
                 success: function (data) {
-                    var udsystem = fwz + '1';
+                    var udsystem = '';
+                    if (fwz==='L'||fwz==='S') {
+                        udsystem=fwz+'2';
+                    }else{
+                        udsystem = fwz + '1';
+                    }
+
                     if (data.length <= 0) {
                         reId = saveLog(caller, callid, luId, null, null, fwz, udsystem);
                     } else {
-                        for (var i = 0; i < data.length; i++) {
-                            reId = saveLog(caller, callid, luId, data[i].usernameen, data[i].depname, fwz, udsystem);
-                        }
+                        // for (var i = 0; i < data.length; i++) {
+                        //解决通讯录有多条数据时，记录重复保存的问题
+
+                       reId = saveLog(caller, callid, luId, data[0].usernameen, data[0].depname, fwz, udsystem);
+                        // }
                     }
                 }
             });
