@@ -25,7 +25,7 @@
     <li class="layui-nav-item">
         <button class="layui-btn" id="zhiXian" onclick="zhiXian()" style="font-weight: bold">置闲</button>
     </li>
-<#--<li class="layui-nav-item"><button class="layui-btn" onclick="openTest()">测试弹窗</button></li>-->
+<#--<li class="layui-nav-item"><button class="layui-btn" onclick="testDelivered()">测试弹窗</button></li>-->
     <li class="layui-nav-item" style="float: right">
         <button class="layui-btn" onclick="openCall()" style="font-weight: bold">话务查询</button>
     </li>
@@ -338,23 +338,23 @@
         });
     }
 
-    function saveLog(caller, callid, lyid, usernameen, depname, fwz, udsystem) {
+    function saveLog(caller, callid, lyid, usernameen, depname, fwz, udsystem,unit) {
         var id = 0;
-        var unit = '';
-        $.ajax({
-            type: "post",
-            url: "${basePath}/seat/findUserInfoByTel",
-            data: "tel=" + caller,
-            async: false,
-            dataType: "json",
-            success: function (data) {
-                // console.log(data[0]);
-                if (!data.length<=0){
-                    unit = data[0].unit;
-                }
+        <#--var unit = '';-->
+        <#--$.ajax({-->
+            <#--type: "post",-->
+            <#--url: "${basePath}/seat/findUserInfoByTel",-->
+            <#--data: "tel=" + caller,-->
+            <#--async: false,-->
+            <#--dataType: "json",-->
+            <#--success: function (data) {-->
+                <#--// console.log(data[0]);-->
+                <#--if (!data.length<=0){-->
+                    <#--unit = data[0].unit;-->
+                <#--}-->
 
-            }
-        });
+            <#--}-->
+        <#--});-->
 
         $.ajax({
             type: "POST",
@@ -404,16 +404,18 @@
                 , limits: [15, 30, 45, 60, 75, 90]
                 , cols: [[ //表头
                     {type: 'checkbox', fixed: 'left'}
-                    , {field: 'repositoryid', title: '序号', align: 'center'}
-                    , {field: 'commoditygroup', title: '服务组', align: 'center'}
-                    , {field: 'zxxt', title: '所属系统', align: 'center'}
-                    , {field: 'description', title: '摘要'}
-                    , {field: 'person', title: '来电人员', align: 'center'}
-                    , {field: 'lxfs', title: '来电号码', align: 'center'}
-                    , {field: 'filterdate', title: '来电时间', sort: true, align: 'center'}
-                    , {field: 'department', title: '来电部门'}
-                    , {field: 'unit', title: '来电单位', align: 'center'}
-                    , {field: 'right', title: '操作', toolbar: '#look', align: 'center'}
+                    , {field: 'repositoryid', title: '序号', width: 60, align: 'center'}
+                    , {field: 'commoditygroup', title: '服务组', align: 'center', width: 180}
+                    , {field: 'udsystem', title: '所属系统', align: 'center', width: 180}
+                    , {field: 'description', title: '摘要', width: 410, align: 'left'}
+                    , {field: 'person', title: '来电人员', width: 90, align: 'center'}
+                    , {field: 'lxfs', title: '来电号码', width: 130, align: 'center'}
+                    , {field: 'filterdate', title: '来电时间', width: 180, sort: true, align: 'center'}
+                    , {field: 'department', title: '来电部门', width: 140, align: 'center'}
+                    , {field: 'unit', title: '来电单位', align: 'center', width: 110}
+                    , {field: 'callid', title: '通话ID', align: 'center', width: 110}
+                    , {field: 'lyid', title: '录音ID', align: 'center', width: 180}
+                    , {field: 'right', title: '操作', toolbar: '#look', align: 'center', width: 70}
                 ]],
                 done: function () {
                     $("th").css({'font-weight': 'bold'});
@@ -468,7 +470,7 @@
     }
 
     function testDelivered() {
-
+        Delivered('','18783641236','','','','','123456,123456');
     }
 
     /**
@@ -501,12 +503,12 @@
                     }
 
                     if (data.length <= 0) {
-                        reId = saveLog(caller, callid, luId, null, null, fwz, udsystem);
+                        reId = saveLog(caller, callid, luId, null, null, fwz, udsystem,'');
                     } else {
                         // for (var i = 0; i < data.length; i++) {
                         //解决通讯录有多条数据时，记录重复保存的问题
 
-                       reId = saveLog(caller, callid, luId, data[0].usernameen, data[0].depname, fwz, udsystem);
+                       reId = saveLog(caller, callid, luId, data[0].usernameen, data[0].depname, fwz, udsystem,data[0].unit);
                         // }
                     }
                 }

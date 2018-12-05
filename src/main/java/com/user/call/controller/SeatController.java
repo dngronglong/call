@@ -9,10 +9,7 @@ import com.user.call.bean.ZxtBean;
 import com.user.call.repository.SeatRepository;
 import com.user.call.repository.TelBookRepository;
 import com.user.call.repository.UserInfoRepository;
-import com.user.call.service.CallService;
-import com.user.call.service.CommoditiesService;
-import com.user.call.service.TelService;
-import com.user.call.service.ZxtService;
+import com.user.call.service.*;
 import com.user.call.utils.StrUtil;
 
 import java.io.PrintStream;
@@ -20,6 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,10 +45,8 @@ public class SeatController {
     private CommoditiesService commoditiesService;
     @Resource
     private ZxtService zxtService;
-//    @Resource
-//    private TelService telService;
-//    private String callId;
-//    private String lyId;
+    @Resource
+    private RepositoryService repositoryService;
 
     @ResponseBody
     @PostMapping(value = {"/findSeat"}, produces = {"application/json;charset=utf-8"})
@@ -68,9 +64,7 @@ public class SeatController {
     public List<TelBookBean> findUserInfoByTel(String tel, HttpServletRequest rq) {
         HttpSession session = rq.getSession();
         tel = "%" + tel;
-//        System.out.println(tel);
         List<TelBookBean> list = this.telBookRepository.findByTel(tel);
-//        System.out.println(list);
         if (list.size() != 0) {
             String depName = ((TelBookBean) list.get(0)).getDEPNAME();
             String[] dep = depName.split("\\/");
@@ -118,7 +112,6 @@ public class SeatController {
         repositoryBean.setDESCRIPTION_LONGDESCRIPTION(xxinfo);
         repositoryBean.setFR1CODE_LONGDESCRIPTION(yy);
         repositoryBean.setFR2CODE_LONGDESCRIPTION(jjfa);
-//        System.out.println(repositoryBean);
         if (gdlx != null) {
             repositoryBean.setGDLX(gdlx);
         } else
@@ -129,8 +122,6 @@ public class SeatController {
     @ResponseBody
     @PostMapping(value = {"/saveLog"}, produces = {"application/json;charset=utf-8"})
     public int saveLog(String caller, String callid, String lyid, String usernameen, String depname, String fwz, String udsystem, String unit) {
-//        this.callId = callid;
-//        this.lyId = lyid;
         Date date = new Date();
         usernameen = usernameen.toUpperCase();
         RepositoryBean repositoryBean = new RepositoryBean();
@@ -145,9 +136,8 @@ public class SeatController {
         repositoryBean.setCOMMODITYGROUP(fwz);
         repositoryBean.setUDSYSTEM(udsystem);
         repositoryBean.setUNIT(unit);
-        RepositoryBean re = (RepositoryBean) this.userInfoRepository.save(repositoryBean);
+        RepositoryBean re = this.userInfoRepository.save(repositoryBean);
         return re.getREPOSITORYID();
-        //System.out.println(this.id);
     }
 
     @ResponseBody
@@ -160,24 +150,25 @@ public class SeatController {
             page = (page - 1) * limit;
             limit = page + limit;
         }
+//        List<Map> list=repositoryService.findByPage(page, limit);
         List<RepositoryBean> listData = this.userInfoRepository.findByPage(page, limit);
         for (int i = 0; i < listData.size(); i++) {
-            String userName = ((RepositoryBean) listData.get(i)).getPERSON();
-            String fwz = ((RepositoryBean) listData.get(i)).getCOMMODITYGROUP();
-            String zxxt = ((RepositoryBean) listData.get(i)).getUDSYSTEM();
+            String userName = (listData.get(i)).getPERSON();
+            String fwz = (listData.get(i)).getCOMMODITYGROUP();
+            String zxxt = (listData.get(i)).getUDSYSTEM();
             if (userName != null) {
                 userName = userName.toLowerCase();
                 if (this.telBookRepository.findByUserNameEEN(userName) != null) {
-                    ((RepositoryBean) listData.get(i)).setPERSON(this.telBookRepository.findByUserNameEEN(userName).getUSERNAMECN());
+                    (listData.get(i)).setPERSON(this.telBookRepository.findByUserNameEEN(userName).getUSERNAMECN());
                 }
             }
             if ((fwz != null) &&
                     (this.commoditiesService.findByCom(fwz) != null)) {
-                ((RepositoryBean) listData.get(i)).setCOMMODITYGROUP(this.commoditiesService.findByCom(fwz).getDESCRIPTION());
+                (listData.get(i)).setCOMMODITYGROUP(this.commoditiesService.findByCom(fwz).getDESCRIPTION());
             }
             if ((zxxt != null) &&
                     (this.zxtService.findByValue(zxxt) != null)) {
-                ((RepositoryBean) listData.get(i)).setUDSYSTEM(this.zxtService.findByValue(zxxt).getDESCRIPTION());
+                (listData.get(i)).setUDSYSTEM(this.zxtService.findByValue(zxxt).getDESCRIPTION());
             }
         }
         LayDataBean layDataBean = new LayDataBean();
@@ -203,22 +194,22 @@ public class SeatController {
             count = callService.countByCn(fwz, zy, ssxt);
             list = (List<RepositoryBean>) callService.findByCn(fwz, zy, ssxt, page, limit);
             for (int i = 0; i < list.size(); i++) {
-                fwz = ((RepositoryBean) list.get(i)).getCOMMODITYGROUP();
-                zy = ((RepositoryBean) list.get(i)).getZXXT();
-                String userName = ((RepositoryBean) list.get(i)).getPERSON();
+                fwz = list.get(i).getCOMMODITYGROUP();
+                zy = list.get(i).getUDSYSTEM();
+                String userName = (list.get(i)).getPERSON();
                 if (userName != null) {
                     userName = userName.toLowerCase();
                     if (this.telBookRepository.findByUserNameEEN(userName) != null) {
-                        ((RepositoryBean) list.get(i)).setPERSON(this.telBookRepository.findByUserNameEEN(userName).getUSERNAMECN());
+                        (list.get(i)).setPERSON(this.telBookRepository.findByUserNameEEN(userName).getUSERNAMECN());
                     }
                 }
                 if ((fwz != null) &&
                         (this.commoditiesService.findByCom(fwz) != null)) {
-                    ((RepositoryBean) list.get(i)).setCOMMODITYGROUP(this.commoditiesService.findByCom(fwz).getDESCRIPTION());
+                    (list.get(i)).setCOMMODITYGROUP(this.commoditiesService.findByCom(fwz).getDESCRIPTION());
                 }
                 if ((zy != null) &&
                         (this.zxtService.findByValue(zy) != null)) {
-                    ((RepositoryBean) list.get(i)).setZXXT(this.zxtService.findByValue(zy).getDESCRIPTION());
+                    (list.get(i)).setUDSYSTEM(this.zxtService.findByValue(zy).getDESCRIPTION());
                 }
             }
         } else {
@@ -228,22 +219,22 @@ public class SeatController {
             count = callService.findCount(fwz, zy, ssxt);
             list = (List<RepositoryBean>) callService.findCallByWhere(fwz, zy, ssxt, page, limit);
             for (int i = 0; i < list.size(); i++) {
-                fwz = ((RepositoryBean) list.get(i)).getCOMMODITYGROUP();
-                zy = ((RepositoryBean) list.get(i)).getZXXT();
-                String userName = ((RepositoryBean) list.get(i)).getPERSON();
+                fwz = list.get(i).getCOMMODITYGROUP();
+                zy = list.get(i).getUDSYSTEM();
+                String userName = list.get(i).getPERSON();
                 if (userName != null) {
                     userName = userName.toLowerCase();
                     if (this.telBookRepository.findByUserNameEEN(userName) != null) {
-                        ((RepositoryBean) list.get(i)).setPERSON(this.telBookRepository.findByUserNameEEN(userName).getUSERNAMECN());
+                        (list.get(i)).setPERSON(this.telBookRepository.findByUserNameEEN(userName).getUSERNAMECN());
                     }
                 }
                 if ((fwz != null) &&
                         (this.commoditiesService.findByCom(fwz) != null)) {
-                    ((RepositoryBean) list.get(i)).setCOMMODITYGROUP(this.commoditiesService.findByCom(fwz).getDESCRIPTION());
+                    (list.get(i)).setCOMMODITYGROUP(this.commoditiesService.findByCom(fwz).getDESCRIPTION());
                 }
                 if ((zy != null) &&
                         (this.zxtService.findByValue(zy) != null)) {
-                    ((RepositoryBean) list.get(i)).setZXXT(this.zxtService.findByValue(zy).getDESCRIPTION());
+                    (list.get(i)).setUDSYSTEM(this.zxtService.findByValue(zy).getDESCRIPTION());
                 }
             }
         }

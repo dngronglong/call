@@ -5,6 +5,7 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -18,7 +19,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
  * Time:16:45
  */
 public class SSLClientUtil extends DefaultHttpClient {
-    public SSLClientUtil() throws Exception{
+    public SSLClientUtil() throws Exception {
         super();
         SSLContext ctx = SSLContext.getInstance("TLS");
         X509TrustManager tm = new X509TrustManager() {
@@ -26,17 +27,19 @@ public class SSLClientUtil extends DefaultHttpClient {
             public void checkClientTrusted(X509Certificate[] chain,
                                            String authType) throws CertificateException {
             }
+
             @Override
             public void checkServerTrusted(X509Certificate[] chain,
                                            String authType) throws CertificateException {
             }
+
             @Override
             public X509Certificate[] getAcceptedIssuers() {
                 return null;
             }
         };
         ctx.init(null, new TrustManager[]{tm}, null);
-        SSLSocketFactory ssf = new SSLSocketFactory(ctx,SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+        SSLSocketFactory ssf = new SSLSocketFactory(ctx, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
         ClientConnectionManager ccm = this.getConnectionManager();
         SchemeRegistry sr = ccm.getSchemeRegistry();
         sr.register(new Scheme("https", 443, ssf));

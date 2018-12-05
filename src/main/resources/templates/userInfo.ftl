@@ -677,8 +677,6 @@
             table.render({
                 elem: '#zxt'
                 , id: 'zxt'
-                //,height: 315
-                //,height:'full-155'
                 , offset: 'auto'
                 , url: '${basePath}/zxt/findAllZxt' //数据接口
                 , page: true //开启分页
@@ -750,7 +748,7 @@
             if (obj.event === 'setSign') {
                 //layer.msg(data.locationsite);
                 $("#p_gjyh").val(data.DISPLAYNAME);
-                $("#p_gjyh").attr("personid",data.PERSONID);
+                $("#p_gjyh").attr("personid", data.PERSONID);
                 layer.close(gjyh);
             }
         });
@@ -917,7 +915,7 @@
             var baoGao = $("#baoGaoRen").attr("userNameEn");
             var gdlx = $("#select :checked").val();
             var info = $("#info").val();
-            var gjyh=$("#p_gjyh").attr("personid");
+            var gjyh = $("#p_gjyh").attr("personid");
 
             if (info == "请输入摘要") {
                 info = "";
@@ -931,7 +929,7 @@
             if (jjfa == "请输入解决方案") {
                 jjfa = "";
             }
-            if (gjyh==""){
+            if (gjyh == "") {
                 layer.alert("关键用户不能为空！");
                 return false;
             }
@@ -944,7 +942,7 @@
                 if (qqlx == "") {
                     layer.alert("请求类型不能为空！");
                     return false;
-                } else if(qqlx=="需求"){
+                } else if (qqlx == "需求") {
                     //服务请求
                     var tables1 = {
                         UDTPYE: qqlx,
@@ -957,7 +955,7 @@
                         FR2CODE_LONGDESCRIPTION: jjfa,
                         ACTUALFINISH: time,
                         UDRECORDID: GetQueryString("repositoryId"),
-                        UDHQDEPT:gjyh
+                        UDHQDEPT: gjyh
                     };
                     var param = {
                         personid: '${userId}',
