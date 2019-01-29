@@ -744,7 +744,7 @@
         });
         table.on('tool(gjyhEvent)', function (obj) {
             var data = obj.data;
-            console.log(data);
+            //console.log(data);
             if (obj.event === 'setSign') {
                 //layer.msg(data.locationsite);
                 $("#p_gjyh").val(data.DISPLAYNAME);
