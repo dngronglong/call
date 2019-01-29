@@ -338,23 +338,23 @@
         });
     }
 
-    function saveLog(caller, callid, lyid, usernameen, depname, fwz, udsystem,unit) {
+    function saveLog(caller, callid, lyid, usernameen, depname, fwz, udsystem, unit) {
         var id = 0;
-        <#--var unit = '';-->
-        <#--$.ajax({-->
-            <#--type: "post",-->
-            <#--url: "${basePath}/seat/findUserInfoByTel",-->
-            <#--data: "tel=" + caller,-->
-            <#--async: false,-->
-            <#--dataType: "json",-->
-            <#--success: function (data) {-->
-                <#--// console.log(data[0]);-->
-                <#--if (!data.length<=0){-->
-                    <#--unit = data[0].unit;-->
-                <#--}-->
+    <#--var unit = '';-->
+    <#--$.ajax({-->
+    <#--type: "post",-->
+    <#--url: "${basePath}/seat/findUserInfoByTel",-->
+    <#--data: "tel=" + caller,-->
+    <#--async: false,-->
+    <#--dataType: "json",-->
+    <#--success: function (data) {-->
+    <#--// console.log(data[0]);-->
+    <#--if (!data.length<=0){-->
+    <#--unit = data[0].unit;-->
+    <#--}-->
 
-            <#--}-->
-        <#--});-->
+    <#--}-->
+    <#--});-->
 
         $.ajax({
             type: "POST",
@@ -470,7 +470,7 @@
     }
 
     function testDelivered() {
-        Delivered('','18783641236','','','','','123456,123456');
+        Delivered('', '18783641236', '', '', '', '', '123456,123456');
     }
 
     /**
@@ -496,19 +496,19 @@
                 dataType: "json",
                 success: function (data) {
                     var udsystem = '';
-                    if (fwz==='L'||fwz==='S') {
-                        udsystem=fwz+'2';
-                    }else{
+                    if (fwz === 'L' || fwz === 'S') {
+                        udsystem = fwz + '2';
+                    } else {
                         udsystem = fwz + '1';
                     }
 
                     if (data.length <= 0) {
-                        reId = saveLog(caller, callid, luId, null, null, fwz, udsystem,'');
+                        reId = saveLog(caller, callid, luId, null, null, fwz, udsystem, '');
                     } else {
                         // for (var i = 0; i < data.length; i++) {
                         //解决通讯录有多条数据时，记录重复保存的问题
 
-                       reId = saveLog(caller, callid, luId, data[0].usernameen, data[0].depname, fwz, udsystem,data[0].unit);
+                        reId = saveLog(caller, callid, luId, data[0].usernameen, data[0].depname, fwz, udsystem, data[0].unit);
                         // }
                     }
                 }

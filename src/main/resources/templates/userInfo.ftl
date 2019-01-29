@@ -532,7 +532,7 @@
             async: true,
             dataType: "json",
             success: function (data) {
-                console.log(data);
+                //console.log(data);
 
                 $.ajax({
                     type: "post",
@@ -872,7 +872,7 @@
         });
         form.on('select(qqlx)', function (data) {
             qqlx = data.value;
-            console.log(qqlx);
+            //console.log(qqlx);
             $.ajax({
                 type: "POST",
                 url: "${basePath}/workOrder/sr/type",
@@ -905,7 +905,7 @@
         var s_sjlx = '';
         form.on('select(qqtype)', function (data) {
             qqtype = data.value;
-            console.log(qqtype);
+            //console.log(qqtype);
         })
         form.on('select(s_sjlx)', function (data) {
             s_sjlx = data.value;
@@ -954,6 +954,7 @@
                         FR1CODE_LONGDESCRIPTION: yy,
                         FR2CODE_LONGDESCRIPTION: jjfa,
                         ACTUALFINISH: time,
+                        UDZXT: $("#ziXunXiTong").attr("zxt"), //所属系统,
                         UDRECORDID: GetQueryString("repositoryId"),
                         UDHQDEPT: gjyh
                     };
@@ -1001,6 +1002,7 @@
                             FR1CODE_LONGDESCRIPTION: yy,
                             FR2CODE_LONGDESCRIPTION: jjfa,
                             ACTUALFINISH: time,
+                            UDZXT: $("#ziXunXiTong").attr("zxt"), //所属系统,
                             UDRECORDID: GetQueryString("repositoryId")
                         };
                         var param = {
@@ -1051,6 +1053,7 @@
                         ACTUALFINISH: time,
                         UDCRTYPE: "一级",
                         ACTUALCONTACTDATE: time,
+                        UDZXT: $("#ziXunXiTong").attr("zxt"), //所属系统,
                         UDRECORDID: GetQueryString("repositoryId")
                     };
                     var param = {
@@ -1101,7 +1104,6 @@
                     type: 'PROBLEM', //工单类型
                     TABLES: tables
                 };
-                console.log(param);
                 $.ajax({
                     type: "POST",
                     url: "${basePath}/workOrder/add",
